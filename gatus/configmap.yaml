@@ -33,16 +33,14 @@ data:
 
       - name: ArgoCD
         group: Infrastructure
-        url: https://argocd.thesugu.com
+        url: https://argo.thesugu.com
         interval: 60s
         conditions:
           - "[STATUS] == 200"
 
       - name: K3s API
         group: Cluster
-        url: https://127.0.0.1:6443/healthz
+        url: tcp://kubernetes.default.svc:443
         interval: 30s
-        client:
-          insecure: true
         conditions:
-          - "[STATUS] == 200"
+          - "[CONNECTED] == true"
