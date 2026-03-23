@@ -110,6 +110,11 @@ spec:
         prometheus:
           enabled: false
 
+        ## Disable loki-stack's self-provisioned Grafana datasource
+        ## (Loki is already added via kube-prometheus-stack's additionalDataSources)
+        loki:
+          isDefault: false
+
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
