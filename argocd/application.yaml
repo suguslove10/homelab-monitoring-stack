@@ -14,7 +14,7 @@ spec:
     # UPDATE: Set this to your Git repo URL
     repoURL: https://github.com/suguslove10/homelab-monitoring-stack.git
     targetRevision: HEAD
-    path: observability/argocd
+    path: argocd
     directory:
       recurse: false
   destination:
