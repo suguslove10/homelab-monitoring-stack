@@ -1,0 +1,34 @@
+## App-of-Apps: deploys both kube-prometheus-stack and loki-stack
+## This is the only file you need to kubectl apply manually.
+## It watches the argocd/ folder in your repo and syncs the child Applications.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: observability-stack
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # UPDATE: Set this to your Git repo URL
+    repoURL: https://github.com/suguslove10/homelab-monitoring-stack.git
+    targetRevision: HEAD
+    path: observability/argocd
+    directory:
+      recurse: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
