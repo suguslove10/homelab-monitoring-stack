@@ -44,8 +44,18 @@ spec:
           adminUser: admin
           adminPassword: admin
           service:
-            type: NodePort
-            nodePort: 30300
+            type: ClusterIP
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert-manager.io/cluster-issuer: "letsencrypt-prod" # Optional: If you use cert-manager for other domains, this will give you automatic HTTPS
+            hosts:
+              - grafana.thesugu.com
+            tls:
+              - secretName: grafana-tls
+                hosts:
+                  - grafana.thesugu.com
           persistence:
             enabled: true
             size: 5Gi
