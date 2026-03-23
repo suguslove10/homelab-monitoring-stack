@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gatus
+  namespace: monitoring
+  labels:
+    app: gatus
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  tls:
+    - secretName: gatus-tls
+      hosts:
+        - status.thesugu.com
+  rules:
+    - host: status.thesugu.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gatus
+                port:
+                  number: 8080

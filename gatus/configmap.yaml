@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gatus-config
+  namespace: monitoring
+  labels:
+    app: gatus
+data:
+  config.yaml: |
+    storage:
+      type: sqlite
+      path: /data/data.db
+
+    ui:
+      title: "Sugu's Infrastructure Status"
+      description: "Live uptime monitoring for all services"
+
+    endpoints:
+      - name: Portfolio
+        group: External
+        url: https://thesugu.com
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+          - "[RESPONSE_TIME] < 3000"
+
+      - name: Grafana
+        group: Infrastructure
+        url: https://grafana.thesugu.com
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: ArgoCD
+        group: Infrastructure
+        url: https://argocd.thesugu.com
+        interval: 60s
+        conditions:
+          - "[STATUS] == 200"
+
+      - name: K3s API
+        group: Cluster
+        url: https://127.0.0.1:6443/healthz
+        interval: 30s
+        client:
+          insecure: true
+        conditions:
+          - "[STATUS] == 200"
